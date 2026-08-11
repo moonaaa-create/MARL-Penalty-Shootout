@@ -1,0 +1,70 @@
+학습 시작 (뒤에 --force는 초기화를 의미함)
+mlagents-learn "Project/config/ppo/Pong_adversarial.yaml" --run-id=Kicker_Goalkeeper_Final --force
+
+텐서보드에서 학습 확인
+tensorboard --logdir=results  
+
+yaml 파일 -> 여기서 휴리스틱으로 바꾸고 싶으면 해당 행동 코드 싹 지우면 됨.
+behaviors:
+  Behavior_K:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 512
+      buffer_size: 5120
+      learning_rate: 0.0005
+      beta: 3
+      epsilon: 0.3
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: true
+      hidden_units: 128
+      num_layers: 2
+      vis_encode_type: simple
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    keep_checkpoints: 5
+    max_steps: 1000000
+    time_horizon: 1000
+    summary_freq: 20000
+    self_play:
+      save_steps: 10000
+      team_change: 40000
+      swap_steps: 10000
+      window: 10
+      play_against_latest_model_ratio: 0.5
+      initial_elo: 1200.0
+  Behavior_G:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 512
+      buffer_size: 5120
+      learning_rate: 0.0005
+      beta: 3
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: true
+      hidden_units: 128
+      num_layers: 2
+      vis_encode_type: simple
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    keep_checkpoints: 5
+    max_steps: 1000000
+    time_horizon: 1000
+    summary_freq: 20000
+    self_play:
+      save_steps: 10000
+      team_change: 40000
+      swap_steps: 10000
+      window: 10
+      play_against_latest_model_ratio: 0.5
+      initial_elo: 1200.0
